@@ -1,8 +1,7 @@
 # AlgoliaPlaces
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/algolia_places`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Ruby Client for [Algolia Places API](https://community.algolia.com/places/rest.html)
+The main purpose of this gem is to provide a geocoding solution based on Algolia Places
 
 ## Installation
 
@@ -22,7 +21,25 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+
+
+```ruby
+
+# Configure AlgoliaPlaces
+# @param [Hash] opts the options to configure AlgoliaPlaces
+# @option opts [String] :app_id Algolia App Id for PLACES
+# @option opts [String] :api_key Algolia Api key
+# @option opts [Boolean] :rest_exception (false) launch exception on REST errors
+# @option opts [Logger] :logger by default STDOUT
+
+AlgoliaPlaces.configuration app_id: 'ALGOLIA_APP_ID', api_key: 'ALGOLIA_API_KEY'
+
+# Geocode
+
+AlgoliaPlaces.coordinates '1649 HAVENBROOK, SUDBURY, Ontario'
+# => [46.5333, -80.9329]
+
+```
 
 ## Development
 
@@ -32,7 +49,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/algolia_places. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/kopz9999/algolia_places. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 
 ## License

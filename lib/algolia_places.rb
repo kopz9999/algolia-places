@@ -26,6 +26,12 @@ class AlgoliaPlaces
 
   alias :rest_exception? :rest_exception 
   
+  # Configure AlgoliaPlaces
+  # @param [Hash] opts the options to configure AlgoliaPlaces
+  # @option opts [String] :app_id Algolia App Id for PLACES
+  # @option opts [String] :api_key Algolia Api key
+  # @option opts [Boolean] :rest_exception (false) launch exception on REST errors
+  # @option opts [Logger] :logger by default STDOUT
   def configuration(opts = {})
     self.app_id = opts.fetch :app_id
     self.api_key = opts.fetch :api_key
