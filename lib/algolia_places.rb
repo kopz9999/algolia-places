@@ -1,3 +1,4 @@
+require 'json'
 require 'singleton'
 require 'forwardable'
 require "rest-client"
