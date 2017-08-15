@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["kopz9999"]
   spec.email         = ["kopz9999@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = 'REST Client for Algolia PLACES API'
+  # spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.homepage      = "https://github.com/kopz9999/algolia-places"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -30,4 +30,12 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.12"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency 'dotenv', '~> 2.2'
+  spec.add_development_dependency 'pry', '~> 0.10'
+  spec.add_development_dependency 'pry-byebug', '~> 3.4'
+  spec.add_development_dependency 'webmock', '~> 3.0'
+  spec.add_development_dependency 'vcr', '~> 3.0'
+  
+  spec.add_runtime_dependency 'rest-client', '~> 2.0'
+  spec.add_runtime_dependency 'jsonpath', '~> 0.8'
 end

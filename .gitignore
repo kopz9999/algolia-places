@@ -8,3 +8,7 @@
 /spec/reports/
 /tmp/
 /.c9/
+/log/*
+!/log/.keep
+/spec/cassettes/*
+.env

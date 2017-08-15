@@ -1,5 +1,92 @@
-require "algolia_places/version"
+require 'singleton'
+require 'forwardable'
+require "rest-client"
+require 'logger'
+require 'jsonpath'
 
-module AlgoliaPlaces
-  # Your code goes here...
+class AlgoliaPlaces
+  URL = 'https://places-dsn.algolia.net/1/places/query'
+
+  include Singleton
+
+  class << self
+    extend Forwardable
+    def_delegators :instance, :coordinates, :coordinates
+    def_delegators :instance, :configuration, :configuration
+    
+    def root
+      File.expand_path '../..', __FILE__
+    end
+  end
+
+  attr_writer :app_id
+  attr_writer :api_key
+  attr_writer :logger
+  attr_accessor :rest_exception
+
+  alias :rest_exception? :rest_exception 
+  
+  def configuration(opts = {})
+    self.app_id = opts.fetch :app_id
+    self.api_key = opts.fetch :api_key
+    self.rest_exception = opts.fetch :rest_exception, false
+    self.logger = opts[:logger] if opts[:logger]
+  end
+
+  def coordinates(query)
+    begin
+      resp = retrieve_query(query)
+      validate_response(resp)
+    rescue RestClient::ExceptionWithResponse => err
+      if self.rest_exception?
+        raise err
+      else
+        self.logger.fatal("#{err}\n#{err.backtrace.inspect}")
+        default_coords
+      end
+    end
+  end
+
+  def validate_response(resp)
+    results = JsonPath.new('$.hits[0]._geoloc').on resp.body
+    geo_loc = results.first
+    if geo_loc.nil?
+      default_coords
+    else
+      [geo_loc['lat'], geo_loc['lng']]
+    end
+  end
+
+  def default_coords
+    [0,0]
+  end
+
+  def retrieve_query(query)
+    RestClient.post(URL,
+                    { query: query }.to_json,
+                    {
+                      'X-Algolia-Application-Id' => self.app_id,
+                      'X-Algolia-API-Key' => self.api_key,
+                    })
+  end
+
+  def app_id
+    @app_id ||= ENV['ALGOLIA_APP_ID']
+  end
+
+  def api_key
+    @api_key||= ENV['ALGOLIA_API_KEY']
+  end
+  
+  def logger
+    @logger||= setup_logger
+  end
+  
+  private
+  
+  def setup_logger
+    log = Logger.new(STDOUT)
+    log.level = Logger::INFO
+    log
+  end
 end
