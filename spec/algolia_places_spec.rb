@@ -52,4 +52,14 @@ describe AlgoliaPlaces, :vcr do
       end
     end
   end
+  
+  describe '#hits' do
+    context 'with environment variables' do
+      subject{ described_class.hits '1649 HAVENBROOK, SUDBURY, Ontario' }
+      
+      it 'brings hits' do
+        expect(subject.first).to be_kind_of(Hash)
+      end
+    end    
+  end
 end

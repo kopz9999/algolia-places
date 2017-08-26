@@ -13,6 +13,7 @@ class AlgoliaPlaces
   class << self
     extend Forwardable
     def_delegators :instance, :coordinates, :coordinates
+    def_delegators :instance, :hits, :hits
     def_delegators :instance, :configuration, :configuration
     
     def root
@@ -43,7 +44,7 @@ class AlgoliaPlaces
   def coordinates(query)
     begin
       resp = retrieve_query(query)
-      validate_response(resp)
+      coordinates_response(resp)
     rescue RestClient::ExceptionWithResponse => err
       if self.rest_exception?
         raise err
@@ -53,8 +54,28 @@ class AlgoliaPlaces
       end
     end
   end
+  
+  def hits(query)
+    begin
+      resp = retrieve_query(query)
+      hits_response(resp)
+    rescue RestClient::ExceptionWithResponse => err
+      if self.rest_exception?
+        raise err
+      else
+        self.logger.fatal("#{err}\n#{err.backtrace.inspect}")
+        []
+      end
+    end
+  end
 
-  def validate_response(resp)
+  protected
+  
+  def hits_response(resp)
+    JsonPath.new('$.hits').on(resp.body).first
+  end
+
+  def coordinates_response(resp)
     results = JsonPath.new('$.hits[0]._geoloc').on resp.body
     geo_loc = results.first
     if geo_loc.nil?
